@@ -1,0 +1,27 @@
+{
+  "name": "stock-digest",
+  "private": true,
+  "workspaces": [
+    "apps/api",
+    "apps/worker"
+  ],
+  "scripts": {
+    "dev:api": "npm run dev -w @stock/api",
+    "dev:worker": "npm run dev -w @stock/worker",
+    "deploy:api": "npm run deploy -w @stock/api",
+    "deploy:worker": "npm run deploy -w @stock/worker",
+    "typecheck": "npm run typecheck -w @stock/api && npm run typecheck -w @stock/worker",
+    "test": "node --experimental-strip-types --test apps/api/test/*.test.ts apps/worker/test/*.test.ts",
+    "db:migrate:local": "npm run db:migrate:local -w @stock/api",
+    "db:migrate:remote": "npm run db:migrate:remote -w @stock/api",
+    "db:seed:local": "npm run db:seed:local -w @stock/api",
+    "db:seed:remote": "npm run db:seed:remote -w @stock/api",
+    "cf-typegen": "npm run cf-typegen -w @stock/api && npm run cf-typegen -w @stock/worker"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261006.1",
+    "@types/node": "^26.6.4",
+    "typescript": "^7.0.2",
+    "wrangler": "^4.148.0"
+  }
+}

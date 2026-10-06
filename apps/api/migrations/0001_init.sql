@@ -1,0 +1,14 @@
+CREATE TABLE products (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  sku TEXT NOT NULL UNIQUE,
+  name TEXT NOT NULL,
+  quantity INTEGER NOT NULL,
+  reorder_at INTEGER NOT NULL,
+  updated_at TEXT NOT NULL
+);
+CREATE TABLE digests (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  created_at TEXT NOT NULL,
+  item_count INTEGER NOT NULL,
+  items_json TEXT NOT NULL
+);

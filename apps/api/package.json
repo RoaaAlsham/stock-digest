@@ -1,0 +1,15 @@
+{
+  "name": "@stock/api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "cf-typegen": "wrangler types",
+    "db:migrate:local": "wrangler d1 execute stock-digest --local --file=./migrations/0001_init.sql",
+    "db:migrate:remote": "wrangler d1 execute stock-digest --remote --file=./migrations/0001_init.sql",
+    "db:seed:local": "wrangler d1 execute stock-digest --local --file=./seed.sql",
+    "db:seed:remote": "wrangler d1 execute stock-digest --remote --file=./seed.sql"
+  }
+}

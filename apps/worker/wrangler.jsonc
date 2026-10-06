@@ -1,0 +1,23 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "stock-worker",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-06",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
+  "observability": {
+    "enabled": true,
+    "traces": { "enabled": true }
+  },
+  "triggers": {
+    "crons": ["0 8 * * *"]
+  },
+  "secrets": {
+    "required": ["API_KEY", "RUN_SECRET"]
+  },
+  "vars": {
+    "API_BASE_URL": "https://stock-api.alsham.workers.dev"
+  }
+}

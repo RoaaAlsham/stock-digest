@@ -1,0 +1,3 @@
+# Real values go in .dev.vars, which is gitignored.
+# Wrangler loads .dev.vars for wrangler dev and does not upload that file on deploy.
+API_KEY=

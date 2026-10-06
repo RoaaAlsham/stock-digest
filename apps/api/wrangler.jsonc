@@ -1,0 +1,21 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "stock-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-06",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+    "traces": { "enabled": true }
+  },
+  "secrets": {
+    "required": ["API_KEY"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "stock-digest",
+      "database_id": "728604db-77a0-4f04-aaf8-915985338301"
+    }
+  ]
+}
