@@ -15,9 +15,10 @@
     "crons": ["0 8 * * *"]
   },
   "secrets": {
-    "required": ["API_KEY", "RUN_SECRET"]
+    "required": ["AUTHDEEP_SERVICE_KEY", "AUTHDEEP_HMAC_SECRET", "RUN_SECRET"]
   },
   "vars": {
-    "API_BASE_URL": "https://stock-api.alsham.workers.dev"
+    "AUTHDEEP_BASE_URL": "https://example.authdeep.com",
+    "AUTHDEEP_DIGEST_TO": "ops@example.com"
   }
 }

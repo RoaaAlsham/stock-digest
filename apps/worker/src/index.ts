@@ -1,5 +1,5 @@
 import { timingSafeEqual } from "node:crypto";
-import { readConfig } from "./config.ts";
+import { configReady, readConfig } from "./config.ts";
 import { runDigest } from "./run.ts";
 
 function json(data: unknown, status = 200): Response {
@@ -31,10 +31,10 @@ export default {
     if (request.method !== "POST") {
       return json({ error: "method not allowed" }, 405);
     }
-    if (!config.runSecret) {
+    if (!configReady(config)) {
       return json({ error: "not configured" }, 500);
     }
-    if (!authorizeRunKey(request.headers.get("X-Run-Key"), config.runSecret)) {
+    if (!authorizeRunKey(request.headers.get("X-Run-Key"), config.runSecret ?? "")) {
       return json({ error: "unauthorized" }, 401);
     }
     const dryRun = url.searchParams.get("dry") === "1";
@@ -43,6 +43,9 @@ export default {
   },
   async scheduled(_controller, env): Promise<void> {
     const config = readConfig(env);
+    if (!config.baseUrl || !config.serviceKey || !config.hmacSecret || !config.digestTo) {
+      throw new Error("not configured");
+    }
     await runDigest(config, { dryRun: false });
   },
 } satisfies ExportedHandler<Env>;

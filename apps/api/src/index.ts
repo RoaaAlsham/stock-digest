@@ -1,4 +1,4 @@
-import { authorizeApiKey } from "./auth.ts";
+import { verifyGatewaySignature } from "./auth.ts";
 import { readConfig } from "./config.ts";
 import { adjustProduct, createDigest, getProduct, listDigests, listProducts } from "./db.ts";
 import type { Product } from "./db.ts";
@@ -47,8 +47,9 @@ export default {
   async fetch(request, env): Promise<Response> {
     const config = readConfig(env);
     const url = new URL(request.url);
+    const configured = Boolean(config.gatewayKey && config.serviceSecret);
 
-    if (url.pathname !== "/health" && !config.apiKey) {
+    if (url.pathname !== "/health" && !configured) {
       return json({ error: "not configured" }, 500);
     }
 
@@ -58,10 +59,32 @@ export default {
     if (route.name === "health") return json({ ok: true });
 
     const rawBody = await request.text();
-    const provided = request.headers.get("X-Api-Key") ?? undefined;
-    if (!authorizeApiKey(provided, config.apiKey ?? "")) {
+    const authorized = verifyGatewaySignature({
+      method: request.method,
+      pathname: url.pathname,
+      rawBody,
+      gatewayKeyHeader: request.headers.get("X-Gateway-Key") ?? undefined,
+      signatureHeader: request.headers.get("X-Gateway-Signature") ?? undefined,
+      expectedGatewayKey: config.gatewayKey ?? "",
+      serviceSecret: config.serviceSecret ?? "",
+      nowSeconds: Date.now() / 1000,
+    });
+    if (!authorized) {
       return json({ error: "unauthorized" }, 401);
     }
+
+    const userId = request.headers.get("X-AuthDeep-User-ID");
+    const userIdPresent = userId !== null && userId.length > 0;
+    if (userIdPresent) {
+      console.warn("gateway request authenticated — unexpected User-ID header present");
+    }
+    console.log(
+      JSON.stringify({
+        auth_type: request.headers.get("X-AuthDeep-Auth-Type"),
+        api_key_type: request.headers.get("X-AuthDeep-API-Key-Type"),
+        user_id_present: userIdPresent,
+      }),
+    );
 
     const needsBody = route.name === "adjust" || route.name === "create-digest";
     let body: unknown;

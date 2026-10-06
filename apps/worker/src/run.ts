@@ -2,9 +2,11 @@ import { deliverDigest, getProducts } from "./client.ts";
 import type { WorkerConfig } from "./config.ts";
 import { findLowStock } from "./digest.ts";
 import type { Product } from "./digest.ts";
+import { buildDigestEmail } from "./email.ts";
+import type { DigestEmail } from "./email.ts";
 
 export type RunResult =
-  | { ok: true; dryRun: true; lowStock: Product[] }
+  | { ok: true; dryRun: true; lowStock: Product[]; email: DigestEmail }
   | { ok: true; delivered: false; count: 0 }
   | { ok: true; delivered: true; count: number };
 
@@ -19,9 +21,14 @@ export async function runDigest(
     return { ok: true, delivered: false, count: 0 };
   }
   if (options.dryRun) {
-    return { ok: true, dryRun: true, lowStock };
+    return {
+      ok: true,
+      dryRun: true,
+      lowStock,
+      email: buildDigestEmail(config.digestTo, lowStock),
+    };
   }
   await deliverDigest(config, lowStock);
-  console.log("digest stored");
+  console.log("digest sent");
   return { ok: true, delivered: true, count: lowStock.length };
 }

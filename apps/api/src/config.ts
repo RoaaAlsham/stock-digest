@@ -1,12 +1,17 @@
 export type ApiConfig = {
   db: D1Database;
-  apiKey: string | undefined;
+  gatewayKey: string | undefined;
+  serviceSecret: string | undefined;
 };
 
+function nonempty(value: string | undefined): string | undefined {
+  return typeof value === "string" && value.length > 0 ? value : undefined;
+}
+
 export function readConfig(env: Env): ApiConfig {
-  const apiKey = env.API_KEY;
   return {
     db: env.DB,
-    apiKey: typeof apiKey === "string" && apiKey.length > 0 ? apiKey : undefined,
+    gatewayKey: nonempty(env.AUTHDEEP_GATEWAY_KEY),
+    serviceSecret: nonempty(env.AUTHDEEP_SERVICE_SECRET),
   };
 }

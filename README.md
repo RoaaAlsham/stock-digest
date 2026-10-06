@@ -97,6 +97,17 @@ npm run deploy:api
 npm run deploy:worker
 ```
 
+## This deployment
+
+`main` is deployed:
+
+| Worker | URL |
+| --- | --- |
+| `stock-api` | `https://stock-api.alsham.workers.dev` |
+| `stock-worker` | `https://stock-worker.alsham.workers.dev` |
+
+The worker cron is `0 8 * * *`. D1 database name `stock-digest`.
+
 ## Checks against the deployed API (main)
 
 Replace the origin and send the real `X-Api-Key` / `X-Run-Key` from Wrangler. These examples do not contain secret values.
@@ -211,6 +222,8 @@ Worker (`stock-worker`):
 | `AUTHDEEP_HMAC_SECRET` | secret |
 | `AUTHDEEP_DIGEST_TO` | var, recipient email |
 | `RUN_SECRET` | secret, unchanged |
+
+`apps/worker/wrangler.jsonc` on this branch ships placeholder values for `AUTHDEEP_BASE_URL` and `AUTHDEEP_DIGEST_TO`. Replace both before deploying the worker. Do not put `sak_`, `gwk_`, `ssk_`, or HMAC secrets in that file.
 
 Remove `API_KEY` from the API Worker with `wrangler secret delete` after the gateway secrets work. Remove `API_KEY` and `API_BASE_URL` from the worker the same way.
 

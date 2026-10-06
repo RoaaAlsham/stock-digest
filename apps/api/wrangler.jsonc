@@ -9,7 +9,7 @@
     "traces": { "enabled": true }
   },
   "secrets": {
-    "required": ["API_KEY"]
+    "required": ["AUTHDEEP_GATEWAY_KEY", "AUTHDEEP_SERVICE_SECRET"]
   },
   "d1_databases": [
     {
