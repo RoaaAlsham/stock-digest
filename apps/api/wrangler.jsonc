@@ -17,5 +17,8 @@
       "database_name": "stock-digest",
       "database_id": "728604db-77a0-4f04-aaf8-915985338301"
     }
-  ]
+  ],
+  "routes": [
+  { "pattern": "stock-api.ralsham.com", "custom_domain": true }
+]
 }

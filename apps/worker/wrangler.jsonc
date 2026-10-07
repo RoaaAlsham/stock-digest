@@ -18,7 +18,10 @@
     "required": ["AUTHDEEP_SERVICE_KEY", "AUTHDEEP_HMAC_SECRET", "RUN_SECRET"]
   },
   "vars": {
-    "AUTHDEEP_BASE_URL": "https://example.authdeep.com",
-    "AUTHDEEP_DIGEST_TO": "ops@example.com"
-  }
+    "AUTHDEEP_BASE_URL": "https://roaa-alsham.authdeep.com",
+    "AUTHDEEP_DIGEST_TO": "roaa.tur.123@gmail.com"
+  },
+  "routes": [
+  { "pattern": "stock-worker.ralsham.com", "custom_domain": true }
+]
 }
